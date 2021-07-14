@@ -1,5 +1,3 @@
-// src/js/components/List.js
-
 import React from "react"
 import { connect } from "react-redux"
 import * as d3 from 'd3'
@@ -18,6 +16,39 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
+const sliderSettings = {
+  track: {
+    width: 5,
+    height: 100,
+    fill: '#DDD',
+    stroke: '#AAA'
+  },
+  handle: {
+    width: 20,
+    height: 10,
+    fill: '#666',
+    rx: 3
+  },
+  textValue: {
+    width: 30,
+    height: 20,
+    heightOffset: 6,
+    fill: 'none',
+    stroke: '#AAA',
+    rx: 2,
+    fontSize: 12,
+    fontFill: '#333',
+    fontWeight: 100
+  },
+  textLabel: {
+    fontSize: 14,
+    fontFill: '#333',
+    fontWeight: 700,
+    heightOffset: -8
+  }
+}
+
+
 export class ConnectedKnob extends React.Component {
   
   constructor(props) {
@@ -26,17 +57,25 @@ export class ConnectedKnob extends React.Component {
     this.textRef = React.createRef()
     this.scaleIndicatorCircle = d3.scaleLinear().domain([0,100]).range([-130,130])
     this.scaleIndicatorSlider = d3.scaleLinear().domain([0,100]).range([100,0])
+    this.scaleDisplayValue = d3.scaleLinear().domain([0,100]).range(this.props.outputRange)
   }
 
   componentDidMount () {    
     console.log('knob value', this.props.knobValue)
-    const dragHandler = d3.drag().on('drag', dragged)
+    const dragHandler = d3.drag().on('drag', dragged).on('end', ()=>{ window.document.body.style.cursor = 'auto' })
     const self = this
     function dragged (event) {
       // console.log(d3.select(this))
       // console.log(event)
       // console.log([event.x, event.y, event.dx, event.dy].join('\t'))
-      self.props.changeKnob({ synthID: self.props.synthID, id: self.props.id, value: self.props.knobValue - event.dy })
+      window.document.body.style.cursor = 'pointer'
+      self.props.changeKnob({ 
+        synthID: self.props.synthID, 
+        id: self.props.id, 
+        value: self.props.knobValue - event.dy,
+        scaleAttribute: self.scaleDisplayValue,
+        attribute: self.props.attribute
+      })
     }
     dragHandler(d3.select(this.circleRef.current))
   }
@@ -50,29 +89,78 @@ export class ConnectedKnob extends React.Component {
       <>
         <g transform={`translate(${this.props.position.x} ${this.props.position.y})`}>
           {
-            this.props.knobType === 'slider' ? <>
-              <g>
-                <rect x='0' y='0' width='10' height='100' fill='black'/>
-                <rect ref={this.circleRef} x='-15' y={this.scaleIndicatorSlider(this.props.knobValue)} width='40' height='20' fill='red'/>
-                <text ref={this.textRef} x='0' y='0' dy='0.33em' 
-                  fill='black' textAnchor='middle'
-                  style={{userSelect: 'none', pointerEvents: 'none'}}>{this.props.knobValue}</text>
-              </g>
-            </> : <>
-              <circle ref={this.circleRef} cx='0' cy='0' r='30'/>
-              <line x1='0' y1='-10' x2='0' y2='-30' strokeWidth='5' transform={`rotate(${this.scaleIndicatorCircle(this.props.knobValue)})`} stroke='#F00'/>
-              <line x1='0' y1='-20' x2='0' y2='-30' transform='rotate(-130)' stroke='#FFF'/>
-              <line x1='0' y1='-20' x2='0' y2='-30' transform='rotate(130)' stroke='#FFF'/>        
-              <text ref={this.textRef} x='0' y='0' dy='0.33em' 
-                fill='white' textAnchor='middle'
-                style={{userSelect: 'none', pointerEvents: 'none'}}>{this.props.knobValue}</text>
-            </>
+            (()=>{
+              if (this.props.knobType === 'slider') {
+                return (
+                  <Slider 
+                    label={this.props.name} 
+                    knobValue={this.props.knobValue} 
+                    scaleFn={this.scaleIndicatorSlider} 
+                    scaleOutput={this.scaleDisplayValue} 
+                    reference={this.circleRef} 
+                    textReference={this.textRef}
+                  />
+                )
+              } else if (this.props.knobType === 'circle') {
+                return (
+                  <Knob 
+                    label={this.props.name}
+                    knobValue={this.props.knobValue} 
+                    scaleFn={this.scaleIndicatorCircle} 
+                    scaleOutput={this.scaleDisplayValue}
+                    reference={this.circleRef} 
+                    textReference={this.textRef}
+                  />
+                )
+              }  
+            })()
           }
         </g>
       </>
     )
   }
 }
+
+const Slider = ({ knobValue, scaleFn, reference, textReference, label, scaleOutput }) => (
+  <g transform={`translate(${0} ${-sliderSettings.track.height*0.5})`}>
+    <text x='0' y={sliderSettings.textLabel.heightOffset} fontSize={sliderSettings.textLabel.fontSize} fill={sliderSettings.textLabel.fontFill} fontWeight={sliderSettings.textLabel.fontWeight} textAnchor='middle' style={{userSelect: 'none', pointerEvents: 'none'}}>{label}</text>
+    <rect x={-sliderSettings.track.width*0.5} y='0' width={sliderSettings.track.width} height={sliderSettings.track.height} fill={sliderSettings.track.fill} stroke={sliderSettings.track.stroke}/>
+    <rect ref={reference} x={-sliderSettings.handle.width*0.5} y={scaleFn(knobValue)-(sliderSettings.handle.height*0.5)} width={sliderSettings.handle.width} height={sliderSettings.handle.height} fill={sliderSettings.handle.fill} rx={sliderSettings.handle.rx} ry={sliderSettings.handle.rx} style={{cursor: 'pointer'}}/>
+    <g transform={`translate(${-sliderSettings.textValue.width*0.5} ${sliderSettings.track.height + sliderSettings.textValue.heightOffset})`}>
+      <rect x='0' y='0' width={sliderSettings.textValue.width} height={sliderSettings.textValue.height} fill={sliderSettings.textValue.fill} stroke={sliderSettings.textValue.stroke} rx={sliderSettings.textValue.rx}/>
+      <text ref={textReference} x={sliderSettings.textValue.width*0.5} y={sliderSettings.textValue.height*0.5} dy='0.33em' 
+        fill={sliderSettings.textValue.fontFill} textAnchor='middle' fontSize={sliderSettings.textValue.fontSize}
+        fontWeight={sliderSettings.textValue.fontWeight}
+        style={{userSelect: 'none', pointerEvents: 'none'}}>{scaleOutput(knobValue).toFixed(1)}</text>
+    </g>
+  </g>
+)
+
+const Knob = ({ knobValue, scaleFn, reference, textReference, label, scaleOutput }) => (
+  <g>
+    <text x='0' y={sliderSettings.textLabel.heightOffset-25} fontSize={sliderSettings.textLabel.fontSize} fill={sliderSettings.textLabel.fontFill} fontWeight={sliderSettings.textLabel.fontWeight} textAnchor='middle' style={{userSelect: 'none', pointerEvents: 'none'}}>{label}</text>
+    <circle ref={reference} cx='0' cy='0' r='20' fill='#777' stroke='#333'/>
+    <circle ref={reference} cx='0' cy='0' r='14' fill='#DDD'/>
+    <line x1='0' y1='-15' x2='0' y2='-18' strokeWidth='5' strokeLinecap='round' transform={`rotate(${scaleFn(knobValue)})`} stroke='#DDD'/>
+    {d3.range(0,100.01,10).map(n=>{
+      const length = n === 0 || n === 100 || n === 50 ? -29 : -25
+      return (
+        <line x1='0' y1='-20' x2='0' y2={length} strokeWidth='1' transform={`rotate(${scaleFn(n)})`} stroke='#333'/>
+      )      
+    })}
+    <g transform={`translate(${-sliderSettings.textValue.width*0.5} ${sliderSettings.textValue.heightOffset+20})`}>
+      <rect x='0' y='0' width={sliderSettings.textValue.width} height={sliderSettings.textValue.height} fill={sliderSettings.textValue.fill} stroke={sliderSettings.textValue.stroke} rx={sliderSettings.textValue.rx}/>
+      <text ref={textReference} x={sliderSettings.textValue.width*0.5} y={sliderSettings.textValue.height*0.5} dy='0.33em' 
+        fill={sliderSettings.textValue.fontFill} textAnchor='middle' fontSize={sliderSettings.textValue.fontSize}
+        fontWeight={sliderSettings.textValue.fontWeight}
+        style={{userSelect: 'none', pointerEvents: 'none'}}>{scaleOutput(knobValue).toFixed(1)}</text>
+    </g>    
+    {/* <line x1='0' y1='-20' x2='0' y2='-25' strokeWidth='1' transform='rotate(130)' stroke='#000'/>         */}
+    {/* <text ref={textReference} x='0' y='30' dy='0.33em' 
+      fill='#000' textAnchor='middle'
+      style={{userSelect: 'none', pointerEvents: 'none'}}>{knobValue}</text> */}
+  </g>
+)
 
 const SvgKnob = connect(mapStateToProps, mapDispatchToProps)(ConnectedKnob);
 
