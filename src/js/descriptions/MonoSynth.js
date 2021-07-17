@@ -18,6 +18,7 @@ export default function MonoSynth () {
       { knobType: 'slider', position: { x: 425, y: 95 }, size: 50, name: 'D', attribute: 'filterEnvelope.decay', outputRange: [0, 5], defaultValue: 1, value: 20 },
       { knobType: 'slider', position: { x: 460, y: 95 }, size: 50, name: 'S', attribute: 'filterEnvelope.sustain', outputRange: [0, 1], defaultValue: 1, value: 70 },
       { knobType: 'slider', position: { x: 495, y: 95 }, size: 50, name: 'R', attribute: 'filterEnvelope.release', outputRange: [0, 5], defaultValue: 1, value: 80 }    
-    ]
+    ],
+    'buttons': []
   }
 }

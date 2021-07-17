@@ -4,39 +4,36 @@ import { v4 as uuidv4 } from 'uuid'
 // import * as d3 from 'd3'
 
 import MonoSynth from '../../descriptions/MonoSynth'
+import LFO from '../../descriptions/LFO'
 
+import populateScene from '../populateScene'
 
 const labelDescriptions = {
   'monosynth': MonoSynth().labels,
-  'lfo': [
-    { text: 'LFO', position: { x: 0, y: 0 }, dimensions: { width: 120, height: 200 }, shadow: true },
-  ]
+  'lfo': LFO().labels
 }
 
 const knobDescriptions = {
   'monosynth': MonoSynth().knobs,
-  'lfo': []  
+  'lfo': LFO().knobs
 }
 
-const wires = [
-  // { id: 'A', positions: [ { x: 100, y: 100 }, { x:600, y:200 } ] }
-]
+// const loopA = new Tone.Loop(time => {
+//   console.log(time)
+// 	toneObjects[0].triggerAttackRelease("C4", "8n", time)
+// }, "4n")
 
-const loopA = new Tone.Loop(time => {
-  console.log(time)
-	toneObjects[0].triggerAttackRelease("C4", "8n", time)
-}, "4n")
-
-window.addEventListener('keydown', ()=>{
-  // return
-  LFO.start()
-  Tone.start()
-  loopA.start(0)
-  Tone.Transport.start()
-})
+// window.addEventListener('keydown', ()=>{
+//   // return
+//   LFO.start()
+//   Tone.start()
+//   loopA.start(0)
+//   Tone.Transport.start()
+// })
 
 const toneObjects = []  // sound objects
 const synths = []       // state objects
+const wires = []        // connections between tone objects
 
 const scene = [
   { 
@@ -51,28 +48,17 @@ const scene = [
   }
 ]
 
-scene.forEach(sceneElement=>{
-  sceneElement.knobs = knobDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
-  sceneElement.labels = labelDescriptions[sceneElement.type].map(o=>{ return o })
-  synths.push(sceneElement)
 
-  let toneObject = {}
-  if (sceneElement.type === 'monosynth') {
-    toneObject = new Tone.MonoSynth()
-  }
-  toneObject.id = sceneElement.id  
-  // toneObject.toDestination()
-  toneObjects.push(toneObject)
-})
+populateScene(scene, synths, wires, toneObjects)
 
-// connect LFO
-const LFO = new Tone.LFO(1,100,1000)
-LFO.connect(toneObjects[0].filter.frequency)
+// // connect LFO
+// const LFO = new Tone.LFO(1,100,1000)
+// LFO.connect(toneObjects[0].filter.frequency)
 
-const meter = new Tone.DCMeter()
-LFO.connect(meter)
+// const meter = new Tone.DCMeter()
+// LFO.connect(meter)
 
-toneObjects.push(LFO)
+// toneObjects.push(LFO)
 
 toneObjects.forEach(o=>{
   console.log('ToneObject', typeof(o), o.name)
