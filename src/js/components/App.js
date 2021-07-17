@@ -1,11 +1,6 @@
 import React from "react"
 import { connect } from "react-redux"
 import { moveWire } from "../actions/index"
-// import List from "./List"
-// import Form from "./Form"
-// import KnobViewer from './KnobViewer'
-// import KnobController from './KnobController'
-// import SvgKnob from './SvgKnob'
 import MonoSynth from './MonoSynth'
 import Widget from './Widget'
 import Wire from './Wire'
@@ -61,8 +56,8 @@ const ConnectedApp = ({ synths, wires, moveWire }) => (
         })
       }
       <Sequencer position={{x: 200, y: 400}}/>      
-      <Button position={{x: 200, y: 500}} type='A'/>      
-      <Button position={{x: 240, y: 500}} type='B'/>      
+      {/* <Button position={{x: 200, y: 500}} type='A'/>       */}
+      {/* <Button position={{x: 240, y: 500}} type='B'/>       */}
     </svg>
   </div>
 );

@@ -61,12 +61,8 @@ export class ConnectedKnob extends React.Component {
   }
 
   componentDidMount () {    
-    const dragHandler = d3.drag().on('drag', dragged).on('end', ()=>{ window.document.body.style.cursor = 'auto' })
     const self = this
     function dragged (event) {
-      // console.log(d3.select(this))
-      // console.log(event)
-      // console.log([event.x, event.y, event.dx, event.dy].join('\t'))
       window.document.body.style.cursor = 'pointer'
       self.props.changeKnob({ 
         synthID: self.props.synthID, 
@@ -76,6 +72,9 @@ export class ConnectedKnob extends React.Component {
         attribute: self.props.attribute
       })
     }
+    const dragHandler = d3.drag()
+      .on('drag', dragged)
+      .on('end', ()=>{ window.document.body.style.cursor = 'auto' })    
     dragHandler(d3.select(this.circleRef.current))
   }
 
@@ -86,7 +85,18 @@ export class ConnectedKnob extends React.Component {
   render () {
     return (      
       <>
-        <g transform={`translate(${this.props.position.x} ${this.props.position.y})`}>
+        <g transform={`translate(${this.props.position.x} ${this.props.position.y})`} 
+          onDoubleClick={
+            ()=>{
+              this.props.changeKnob({ 
+                synthID: this.props.synthID, 
+                id: this.props.id, 
+                value: this.props.defaultValue,
+                scaleAttribute: this.scaleDisplayValue,
+                attribute: this.props.attribute
+              })              
+            }
+          }>
           {
             (()=>{
               if (this.props.knobType === 'slider') {

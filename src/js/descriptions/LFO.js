@@ -3,8 +3,7 @@ export default function LFO () {
     'labels': [
       { text: 'LFO', position: { x: 0, y: 0 }, dimensions: { width: 120, height: 200 }, shadow: true },
     ],
-    'knobs': [
-    ],
+    'knobs': [],
     'buttons': []
   }
 }

@@ -16,7 +16,6 @@ class ConnectedKnobController extends Component {
     this.setTo = this.setTo.bind(this)
   }
 
-
   setTo(value) {
     this.props.changeKnob({ id: this.knobNumber, value })
   }

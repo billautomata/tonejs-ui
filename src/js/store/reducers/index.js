@@ -1,39 +1,24 @@
-import { KNOB_CHANGE, MOVE_WIRE } from "../../constants/action-types"
-import * as Tone from 'tone'
-import { v4 as uuidv4 } from 'uuid'
+import { KNOB_CHANGE, MOVE_WIRE, BUTTON_ACTION } from "../../constants/action-types"
 // import * as d3 from 'd3'
-
-import MonoSynth from '../../descriptions/MonoSynth'
-import LFO from '../../descriptions/LFO'
-
+import { v4 as uuidv4 } from 'uuid'
 import populateScene from '../populateScene'
+import * as Tone from 'tone'
 
-const labelDescriptions = {
-  'monosynth': MonoSynth().labels,
-  'lfo': LFO().labels
-}
+const loopA = new Tone.Loop(time => {
+  console.log(time)
+	toneObjects[0].triggerAttackRelease("C4", "8n", time)
+}, "4n")
 
-const knobDescriptions = {
-  'monosynth': MonoSynth().knobs,
-  'lfo': LFO().knobs
-}
-
-// const loopA = new Tone.Loop(time => {
-//   console.log(time)
-// 	toneObjects[0].triggerAttackRelease("C4", "8n", time)
-// }, "4n")
-
-// window.addEventListener('keydown', ()=>{
-//   // return
-//   LFO.start()
-//   Tone.start()
-//   loopA.start(0)
-//   Tone.Transport.start()
-// })
+window.addEventListener('keydown', ()=>{
+  // return
+  Tone.start()
+  loopA.start(0)
+  Tone.Transport.start()
+})
 
 const toneObjects = []  // sound objects
-const synths = []       // state objects
-const wires = []        // connections between tone objects
+const synths = []       // UI state objects
+const wires = []        // UI connections between tone objects
 
 const scene = [
   { 
@@ -47,7 +32,6 @@ const scene = [
     position: { x: 10, y: 500 }
   }
 ]
-
 
 populateScene(scene, synths, wires, toneObjects)
 
@@ -63,7 +47,6 @@ populateScene(scene, synths, wires, toneObjects)
 toneObjects.forEach(o=>{
   console.log('ToneObject', typeof(o), o.name)
 })
-
 
 // setInterval(()=>{
 //   console.log('lfo value', meter.getValue())
@@ -103,6 +86,12 @@ function rootReducer(state = initialState, action) {
     // wire.positions[1].x = action.payload.position.x
     // wire.positions[1].y = action.payload.position.y
     return Object.assign({}, state, { wires: state.wires })
+  } else if (action.type === BUTTON_ACTION ) {
+    const toneObject = toneObjects.filter(o=>{return o.id === action.payload.synthID})[0]
+    console.log(toneObject)
+    action.payload.fn(toneObject)
+    state.synths.filter(o=>{ return o.id === action.payload.synthID })[0].buttons.filter(o=>{ return o.id === action.payload.id })[0].value = true
+    return Object.assign({}, state, { synths: state.synths })
   }
   return state
 }

@@ -13,10 +13,17 @@ const knobDescriptions = {
   'lfo': LFO().knobs
 }
 
+const buttonDescriptions = {
+  'monosynth': MonoSynth().buttons,
+  'lfo': LFO().buttons
+}
+
 export default function loadScene (scene, synths, wires, toneObjects) {
   scene.forEach(sceneElement=>{
     sceneElement.knobs = knobDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
+    sceneElement.buttons = buttonDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
     sceneElement.labels = labelDescriptions[sceneElement.type].map(o=>{ return o })
+    console.log(sceneElement)
     synths.push(sceneElement)
   
     let toneObject = {}
@@ -24,7 +31,9 @@ export default function loadScene (scene, synths, wires, toneObjects) {
       toneObject = new Tone.MonoSynth()
     }
     toneObject.id = sceneElement.id  
-    // toneObject.toDestination()
+    if(toneObject.toDestination) {
+      toneObject.toDestination()
+    }    
     toneObjects.push(toneObject)
   })  
 }

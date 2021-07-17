@@ -1,3 +1,4 @@
+import Button from './Button'
 import SvgKnob from './SvgKnob'
 import SynthLabel from './SynthLabel'
 
@@ -11,6 +12,11 @@ const MonoSynthController = (props) => (
     {props.knobs.map((knob,idx)=>{
       return (
         <SvgKnob {...knob} synthID={props.id} key={`synth_${props.id}_knob_${idx}`}/>
+      )
+    })}
+    {props.buttons.map((button,idx)=>{
+      return (
+        <Button {...button} synthID={props.id} key={`synth_${props.id}_button_${idx}`}/>
       )
     })}
   </g>

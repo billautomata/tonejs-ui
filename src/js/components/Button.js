@@ -2,16 +2,18 @@ import React from "react"
 import { connect } from "react-redux"
 // import * as d3 from 'd3'
 // import { changeKnob } from "../actions/index";
+import { buttonAction } from '../actions/index'
 
 const mapStateToProps = (state, ownProps) => {
+  // console.log('button synth id', ownProps.synthID)
   return { 
-    // knobValue: state.synths.filter(o=>{return o.id === ownProps.synthID})[0].knobs.filter(o=>{ return o.id === ownProps.id })[0].value,
+    buttonValue: state.synths.filter(o=>{return o.id === ownProps.synthID})[0].buttons.filter(o=>{ return o.id === ownProps.id })[0].value,
   }
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    // changeKnob: payload => dispatch(changeKnob(payload))
+    buttonAction: payload => dispatch(buttonAction(payload))
   }
 }
 
@@ -29,6 +31,7 @@ export class ConnectedButton extends React.Component {
   }
 
   componentDidMount () {
+    console.log('button mounted', this.props)
   }
 
   componentDidUpdate () {
@@ -38,6 +41,11 @@ export class ConnectedButton extends React.Component {
     this.setState({
       currentlyPressed: true,
       active: !this.state.active
+    })
+    this.props.buttonAction({
+      synthID: this.props.synthID, 
+      id: this.props.id,
+      fn: this.props.action
     })
   }
   mouseUp () {
@@ -53,14 +61,15 @@ export class ConnectedButton extends React.Component {
         style={{cursor: 'pointer'}}
         onMouseDown={this.mouseDown}
         onMouseUp={this.mouseUp}>
+          <text x='15' y='45' dy='0.33em' textAnchor='middle' fontSize='14' fill='#333' fontWeight='500' style={{textTransform: 'uppercase'}}>{this.props.name}</text>
           {
             (()=>{
               switch (this.props.type) {
                 case 'A': return (
-                  <VariantA currentlyPressed={ this.state.currentlyPressed } active={ this.state.active } />
+                  <VariantA currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } />
                 )
                 case 'B': return (
-                  <VariantB currentlyPressed={ this.state.currentlyPressed } active={ this.state.active } />
+                  <VariantB currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } />
                 )
                 default: return (
                   <></>
