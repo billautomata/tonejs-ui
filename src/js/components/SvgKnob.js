@@ -61,7 +61,6 @@ export class ConnectedKnob extends React.Component {
   }
 
   componentDidMount () {    
-    console.log('knob value', this.props.knobValue)
     const dragHandler = d3.drag().on('drag', dragged).on('end', ()=>{ window.document.body.style.cursor = 'auto' })
     const self = this
     function dragged (event) {
@@ -145,7 +144,7 @@ const Knob = ({ knobValue, scaleFn, reference, textReference, label, scaleOutput
     {d3.range(0,100.01,10).map(n=>{
       const length = n === 0 || n === 100 || n === 50 ? -29 : -25
       return (
-        <line x1='0' y1='-20' x2='0' y2={length} strokeWidth='1' transform={`rotate(${scaleFn(n)})`} stroke='#333'/>
+        <line key={n} x1='0' y1='-20' x2='0' y2={length} strokeWidth='1' transform={`rotate(${scaleFn(n)})`} stroke='#333'/>
       )      
     })}
     <g transform={`translate(${-sliderSettings.textValue.width*0.5} ${sliderSettings.textValue.heightOffset+20})`}>
@@ -155,10 +154,6 @@ const Knob = ({ knobValue, scaleFn, reference, textReference, label, scaleOutput
         fontWeight={sliderSettings.textValue.fontWeight}
         style={{userSelect: 'none', pointerEvents: 'none'}}>{scaleOutput(knobValue).toFixed(1)}</text>
     </g>    
-    {/* <line x1='0' y1='-20' x2='0' y2='-25' strokeWidth='1' transform='rotate(130)' stroke='#000'/>         */}
-    {/* <text ref={textReference} x='0' y='30' dy='0.33em' 
-      fill='#000' textAnchor='middle'
-      style={{userSelect: 'none', pointerEvents: 'none'}}>{knobValue}</text> */}
   </g>
 )
 

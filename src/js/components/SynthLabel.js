@@ -5,18 +5,15 @@ export class SynthLabel extends React.Component {
   constructor(props) {
     super(props)
     this.textRef = React.createRef()
-    console.log('this props', this.props)
-    console.log('this state', this.state)
     this.state = {
       rectWidth: 0
     }
   }
   componentDidMount () {
     const text = d3.select(this.textRef.current)
-    console.log(text.node().getBBox())
     this.setState({
-      rectWidth: text.node().getBBox().width
-    })
+      rectWidth: text.node().getBBox().width + 2
+    })  
   }
   render () {
     return (

@@ -1,7 +1,7 @@
 import SvgKnob from './SvgKnob'
 import SynthLabel from './SynthLabel'
 
-const MonoSynthController = (props) => (
+const WidgetController = (props) => (
   <g transform={`translate(${props.position.x} ${props.position.y})`}>
     {props.labels.map((label,idx)=>{
       return (
@@ -16,4 +16,4 @@ const MonoSynthController = (props) => (
   </g>
 );
 
-export default MonoSynthController;
+export default WidgetController;
