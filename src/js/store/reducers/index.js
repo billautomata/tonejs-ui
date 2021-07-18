@@ -10,7 +10,7 @@ const loopA = new Tone.Loop(time => {
 }, "4n")
 
 window.addEventListener('keydown', ()=>{
-  // return
+  return
   Tone.start()
   loopA.start(0)
   Tone.Transport.start()
@@ -30,6 +30,11 @@ const scene = [
     type: 'lfo',
     id: uuidv4(),
     position: { x: 10, y: 500 }
+  },
+  {
+    type: 'sequencer',
+    id: uuidv4(),
+    position: { x: 150, y: 400 }
   }
 ]
 
@@ -65,7 +70,10 @@ function rootReducer(state = initialState, action) {
     // find the object in the scene and change the settings the knob is associated with
     const toneObject = toneObjects.filter(o=>{return o.id === action.payload.synthID})[0]
     if (action.payload.attribute.indexOf('.') === -1) {
-      toneObject[action.payload.attribute].value = action.payload.scaleAttribute(newKnobValue)
+      const o = {}
+      o[action.payload.attribute] = action.payload.scaleAttribute(newKnobValue)
+      toneObject.set(o)
+      // toneObject[action.payload.attribute].value = action.payload.scaleAttribute(newKnobValue)
     } else {
       const attributeChain = action.payload.attribute.split('.')
       if(attributeChain.length === 2) {

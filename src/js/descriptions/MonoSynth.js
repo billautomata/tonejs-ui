@@ -1,13 +1,14 @@
 export default function MonoSynth () {
   return {
     'labels': [
-      { text: 'MONO SYNTH', position: { x: 0, y: 0 }, dimensions: { width: 540, height: 300 }, shadow: true },
+      { text: 'MONO SYNTH', position: { x: 0, y: 0 }, dimensions: { width: 540, height: 340 }, shadow: true },
       { text: 'Envelope', position: { x: 130, y: 20 }, dimensions: { width: 155, height: 166 } },
       { text: 'Filter Envelope', position: { x: 300, y: 20 }, dimensions: { width: 225, height: 166 } }
     ],
-    'knobs': [
-      { knobType: 'circle', position: { x: 40, y: 165 }, size: 50, name: 'Level', attribute: 'volume', outputRange: [-100, 0], defaultValue: 20, value: 20 },
+    'knobs': [      
       { knobType: 'circle', position: { x: 40, y: 60 }, size: 50, name: 'Detune', attribute: 'detune', outputRange: [-50, 50], defaultValue: 50, value: 50 },
+      { knobType: 'circle', position: { x: 40, y: 165 }, size: 50, name: 'Level', attribute: 'volume', outputRange: [-100, 0], defaultValue: 20, value: 20 },
+      { knobType: 'circle', position: { x: 40, y: 270 }, size: 50, name: 'Portamento', attribute: 'oscillator.portamento', outputRange: [0, 2], defaultValue: 0, value: 0 },
       { knobType: 'slider', position: { x: 150, y: 95 }, size: 50, name: 'A', attribute: 'envelope.attack', outputRange: [0, 5], defaultValue: 50, value: 50 },
       { knobType: 'slider', position: { x: 185, y: 95 }, size: 50, name: 'D', attribute: 'envelope.decay', outputRange: [0, 5], defaultValue: 20, value: 20 },
       { knobType: 'slider', position: { x: 220, y: 95 }, size: 50, name: 'S', attribute: 'envelope.sustain', outputRange: [0, 1], defaultValue: 70, value: 70 },

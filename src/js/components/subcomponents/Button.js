@@ -2,7 +2,7 @@ import React from "react"
 import { connect } from "react-redux"
 // import * as d3 from 'd3'
 // import { changeKnob } from "../actions/index";
-import { buttonAction } from '../actions/index'
+import { buttonAction } from '../../actions/index'
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('button synth id', ownProps.synthID)

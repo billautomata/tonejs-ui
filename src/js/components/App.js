@@ -2,9 +2,9 @@ import React from "react"
 import { connect } from "react-redux"
 import { moveWire } from "../actions/index"
 import MonoSynth from './MonoSynth'
+import LFO from './LFO'
 import Widget from './Widget'
 import Wire from './Wire'
-import Button from './Button'
 import Sequencer from './Sequencer'
 
 const mapStateToProps = (state, ownProps) => {
@@ -37,15 +37,20 @@ const ConnectedApp = ({ synths, wires, moveWire }) => (
       </defs>
       { 
         synths.map(synth=>{
-          if(synth.type === 'monosynth') {
-            return (
+          switch (synth.type) {
+            case 'monosynth': return (
               <MonoSynth {...synth} key={`synth_${synth.id}`}/>
             )
+            case 'lfo': return (
+              <LFO {...synth} key={`synth_${synth.id}`}/>
+            )
+            case 'sequencer': return (
+              <Sequencer {...synth} key={`synth_${synth.id}`}/>
+            )
+            default: return (
+              <></>
+            )
           }
-
-          return (
-            <Widget {...synth} key={`synth_${synth.id}`}/>
-          )
         })
       }
       {
@@ -55,9 +60,6 @@ const ConnectedApp = ({ synths, wires, moveWire }) => (
           )          
         })
       }
-      <Sequencer position={{x: 200, y: 400}}/>      
-      {/* <Button position={{x: 200, y: 500}} type='A'/>       */}
-      {/* <Button position={{x: 240, y: 500}} type='B'/>       */}
     </svg>
   </div>
 );

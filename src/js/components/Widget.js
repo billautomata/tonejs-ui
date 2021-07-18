@@ -1,8 +1,9 @@
-import SvgKnob from './SvgKnob'
-import SynthLabel from './SynthLabel'
+import SvgKnob from './subcomponents/SvgKnob'
+import SynthLabel from './subcomponents/SynthLabel'
+import Button from './subcomponents/Button'
 
 const WidgetController = (props) => (
-  <g transform={`translate(${props.position.x} ${props.position.y})`}>
+  <>
     {props.labels.map((label,idx)=>{
       return (
         <SynthLabel {...label} key={`synth_${props.id}_label_${idx}`}/>
@@ -13,7 +14,12 @@ const WidgetController = (props) => (
         <SvgKnob {...knob} synthID={props.id} key={`synth_${props.id}_knob_${idx}`}/>
       )
     })}
-  </g>
+    {props.buttons.map((button,idx)=>{
+      return (
+        <Button {...button} synthID={props.id} key={`synth_${props.id}_button_${idx}`}/>
+      )
+    })}
+  </>
 );
 
 export default WidgetController;

@@ -18,6 +18,9 @@ VCVRack for browsers.
 * [ ] momentary 
 * [x] button group (iterate through list of buttons in the same group, make all false, make the sent button true)
 
+### text inputs
+
+
 ### indicator lights
 
 ### meters 

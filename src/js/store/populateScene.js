@@ -1,21 +1,25 @@
 import * as Tone from 'tone'
 import { v4 as uuidv4 } from 'uuid'
-import MonoSynth from '../descriptions/MonoSynth'
 import LFO from '../descriptions/LFO'
+import MonoSynth from '../descriptions/MonoSynth'
+import Sequencer from '../descriptions/Sequencer'
 
 const labelDescriptions = {
+  'lfo': LFO().labels,
   'monosynth': MonoSynth().labels,
-  'lfo': LFO().labels
+  'sequencer': Sequencer().labels,
 }
 
 const knobDescriptions = {
+  'lfo': LFO().knobs,
   'monosynth': MonoSynth().knobs,
-  'lfo': LFO().knobs
+  'sequencer': Sequencer().knobs,
 }
 
 const buttonDescriptions = {
+  'lfo': LFO().buttons,
   'monosynth': MonoSynth().buttons,
-  'lfo': LFO().buttons
+  'sequencer': Sequencer().buttons
 }
 
 export default function loadScene (scene, synths, wires, toneObjects) {
@@ -29,6 +33,8 @@ export default function loadScene (scene, synths, wires, toneObjects) {
     let toneObject = {}
     if (sceneElement.type === 'monosynth') {
       toneObject = new Tone.MonoSynth()
+    } else if (sceneElement.type === 'lfo') {
+      toneObject = new Tone.LFO()
     }
     toneObject.id = sceneElement.id  
     if(toneObject.toDestination) {

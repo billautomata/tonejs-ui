@@ -1,7 +1,7 @@
 import React from "react"
 import { connect } from "react-redux"
 import * as d3 from 'd3'
-import { changeKnob } from "../actions/index";
+import { changeKnob } from "../../actions/index";
 
 const mapStateToProps = (state, ownProps) => {
   return { 

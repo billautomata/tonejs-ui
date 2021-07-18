@@ -1,5 +1,6 @@
 import React from "react"
 import * as d3 from 'd3'
+import Widget from './Widget'
 
 export class Sequencer extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export class Sequencer extends React.Component {
   render () {
     return (
       <g transform={`translate(${this.props.position.x} ${this.props.position.y})`}>
+        <Widget {...this.props}/>
         {
           d3.range(7).map(n=>{
             return (
