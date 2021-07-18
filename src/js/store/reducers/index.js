@@ -90,6 +90,11 @@ function rootReducer(state = initialState, action) {
     const toneObject = toneObjects.filter(o=>{return o.id === action.payload.synthID})[0]
     console.log(toneObject)
     action.payload.fn(toneObject)
+    if(action.payload.buttonGroup !== undefined) {
+      state.synths.filter(o=>{ return o.id === action.payload.synthID })[0]
+        .buttons.filter(o=>{ return o.buttonGroup === action.payload.buttonGroup })
+        .forEach(button=>{ button.value = false })
+    }    
     state.synths.filter(o=>{ return o.id === action.payload.synthID })[0].buttons.filter(o=>{ return o.id === action.payload.id })[0].value = true
     return Object.assign({}, state, { synths: state.synths })
   }

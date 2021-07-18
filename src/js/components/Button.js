@@ -43,9 +43,10 @@ export class ConnectedButton extends React.Component {
       active: !this.state.active
     })
     this.props.buttonAction({
-      synthID: this.props.synthID, 
+      buttonGroup: this.props.buttonGroup,
       id: this.props.id,
-      fn: this.props.action
+      fn: this.props.action,
+      synthID: this.props.synthID, 
     })
   }
   mouseUp () {

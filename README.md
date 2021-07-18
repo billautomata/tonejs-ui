@@ -16,7 +16,7 @@ VCVRack for browsers.
 * [ ] variable dimensions
 * [ ] toggle 
 * [ ] momentary 
-* [ ] button group (iterate through list of buttons in the same group, make all false, make the sent button true)
+* [x] button group (iterate through list of buttons in the same group, make all false, make the sent button true)
 
 ### indicator lights
 

@@ -20,9 +20,9 @@ export default function MonoSynth () {
       { knobType: 'slider', position: { x: 495, y: 95 }, size: 50, name: 'R', attribute: 'filterEnvelope.release', outputRange: [0, 5], defaultValue: 80, value: 80 }    
     ],
     'buttons': [
-      { type: 'B', position: { x: 130, y: 200 }, name: 'sine', action: (toneObject) => { toneObject.oscillator.set({ type: 'sine' }) }, defaultValue: false, value: true },
-      { type: 'B', position: { x: 180, y: 200 }, name: 'tri', action: (toneObject) => { toneObject.oscillator.set({ type: 'triangle' }) }, defaultValue: false, value: false },
-      { type: 'B', position: { x: 230, y: 200 }, name: 'saw', action: (toneObject) => { toneObject.oscillator.set({ type: 'sawtooth' }) }, defaultValue: false, value: false } ,           
+      { type: 'B', position: { x: 130, y: 200 }, name: 'sine', action: (toneObject) => { toneObject.oscillator.set({ type: 'sine' }) }, defaultValue: false, value: true, buttonGroup: 'oscillatorType' },
+      { type: 'B', position: { x: 180, y: 200 }, name: 'tri', action: (toneObject) => { toneObject.oscillator.set({ type: 'triangle' }) }, defaultValue: false, value: false, buttonGroup: 'oscillatorType' },
+      { type: 'B', position: { x: 230, y: 200 }, name: 'saw', action: (toneObject) => { toneObject.oscillator.set({ type: 'sawtooth' }) }, defaultValue: false, value: false, buttonGroup: 'oscillatorType' } ,           
     ]
   }
 }
