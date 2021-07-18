@@ -13,21 +13,23 @@ const inputStyle = {
 const LFOController = (props) => (
   <g transform={`translate(${props.position.x} ${props.position.y})`}>
     <Widget {...props}/>
-    <g transform='translate(0 130)'>
-      <foreignObject x='0' y='0' width='50' height='30'>
-        <div style={{padding: 1}}>
-          <input style={inputStyle}/>
-        </div>
-      </foreignObject>
-      <text x='23' y='-7.5' textAnchor='middle' fontSize='12' fontWeight='100' dy='0.33em'>MIN</text>
-    </g>
-    <g transform='translate(50 130)'>
-      <foreignObject x='0' y='0' width='50' height='30'>
-        <div style={{padding: 1}}>
-          <input style={inputStyle}/>
-        </div>
-      </foreignObject>
-      <text x='23' y='-7.5' textAnchor='middle' fontSize='12' fontWeight='100' dy='0.33em'>MAX</text>
+    <g transform='translate(0 125)'>
+      <g transform='translate(0 0)'>
+        <foreignObject x='0' y='0' width='50' height='30'>
+          <div style={{padding: 1}}>
+            <input style={inputStyle}/>
+          </div>
+        </foreignObject>
+        <text x='23' y='35' textAnchor='middle' fontSize='12' fontWeight='100' dy='0.33em'>MIN</text>
+      </g>
+      <g transform='translate(50 0)'>
+        <foreignObject x='0' y='0' width='50' height='30'>
+          <div style={{padding: 1}}>
+            <input style={inputStyle}/>
+          </div>
+        </foreignObject>
+        <text x='23' y='35' textAnchor='middle' fontSize='12' fontWeight='100' dy='0.33em'>MAX</text>
+      </g>
     </g>
   </g> 
 );

@@ -96,14 +96,17 @@ function rootReducer(state = initialState, action) {
     return Object.assign({}, state, { wires: state.wires })
   } else if (action.type === BUTTON_ACTION ) {
     const toneObject = toneObjects.filter(o=>{return o.id === action.payload.synthID})[0]
-    console.log(toneObject)
+    const btn = state.synths.filter(o=>{ return o.id === action.payload.synthID })[0].buttons.filter(o=>{ return o.id === action.payload.id })[0]
+    // console.log(toneObject)
     action.payload.fn(toneObject)
     if(action.payload.buttonGroup !== undefined) {
       state.synths.filter(o=>{ return o.id === action.payload.synthID })[0]
         .buttons.filter(o=>{ return o.buttonGroup === action.payload.buttonGroup })
         .forEach(button=>{ button.value = false })
-    }    
-    state.synths.filter(o=>{ return o.id === action.payload.synthID })[0].buttons.filter(o=>{ return o.id === action.payload.id })[0].value = true
+      btn.value = true
+    } else {
+      btn.value = !btn.value
+    }       
     return Object.assign({}, state, { synths: state.synths })
   }
   return state
