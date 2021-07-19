@@ -117,7 +117,11 @@ function rootReducer(state = initialState, action) {
     const synth = state.synths.filter(o=>{ return o.id === action.payload.synthID })[0]
     let btn = synth.buttons.filter(o => { return o.name === `track_${action.payload.activeTrack}_step_${action.payload.activeStep}`})[0]    
     const o = {}
-    o[action.payload.noteName] = !btn.noteData[action.payload.noteName]
+    if(btn.noteData[`${action.payload.noteName}${action.payload.octave}`] !== undefined) {
+      o[`${action.payload.noteName}${action.payload.noteOctave}`] = !btn.noteData[`${action.payload.noteName}${action.payload.noteOctave}`]
+    } else {
+      o[`${action.payload.noteName}${action.payload.noteOctave}`] = true
+    }    
     btn.noteData = Object.assign({}, btn.noteData, o)
     btn = Object.assign({}, btn, { noteData: btn.noteData })    
     synth.buttons = Object.assign([], synth.buttons, { buttons: synth.buttons })
