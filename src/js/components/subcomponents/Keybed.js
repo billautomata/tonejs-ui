@@ -8,7 +8,7 @@ const mapStateToProps = (state, ownProps) => {
   const synth = state.synths.filter(o=>{ return o.id === ownProps.id })[0]
   const activeTrack = synth.buttons.filter(o => { return o.buttonGroup === 'select-track' && o.value === true})[0].name
   const activeStep = synth.buttons.filter(o => { return o.buttonGroup === 'select-step' && o.value === true})[0].name
-  console.log('activeTrack',activeTrack,'activeStep',activeStep)
+  // console.log('activeTrack',activeTrack,'activeStep',activeStep)
   const activeButton = synth.buttons.filter(o => { return o.name === `track_${activeTrack}_step_${activeStep}`})[0]
   return { 
     activeTrack,
@@ -33,10 +33,10 @@ export class ConnectedKeybed extends React.Component {
   }
 
   componentDidMount () {
-    console.log('octave',this.props.octave)
+    // console.log('octave',this.props.octave)
   }
   componentDidUpdate () {
-    console.log(this.props.notes)
+    // console.log(this.props.notes)
   }
 
   noteClicked (note) {

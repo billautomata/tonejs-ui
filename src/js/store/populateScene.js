@@ -22,11 +22,18 @@ const buttonDescriptions = {
   'sequencer': Sequencer().buttons
 }
 
+const metadatas = {
+  'lfo': LFO().metadata,
+  'monosynth': MonoSynth().metadata,
+  'sequencer': Sequencer().metadata
+}
+
 export default function loadScene (scene, synths, wires, toneObjects) {
   scene.forEach(sceneElement=>{
-    sceneElement.knobs = knobDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
     sceneElement.buttons = buttonDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
+    sceneElement.knobs = knobDescriptions[sceneElement.type].map(o=>{ o.id = uuidv4(); return o })
     sceneElement.labels = labelDescriptions[sceneElement.type].map(o=>{ return o })
+    sceneElement.metadata = metadatas[sceneElement.type]
     console.log(sceneElement)
     synths.push(sceneElement)
   

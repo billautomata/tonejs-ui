@@ -34,12 +34,12 @@ const scene = [
   {
     type: 'lfo',
     id: uuidv4(),
-    position: { x: 10, y: 500 }
+    position: { x: 560, y: 30 }
   },
   {
     type: 'sequencer',
     id: uuidv4(),
-    position: { x: 150, y: 400 }
+    position: { x: 10, y: 400 }
   }
 ]
 

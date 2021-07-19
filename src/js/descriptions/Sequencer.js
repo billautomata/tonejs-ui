@@ -48,9 +48,12 @@ stepSelectionButtons[0].value = true
 export default function Sequencer () {
   return {
     'labels': [
-      { text: 'POLYPHONIC SEQUENCER', position: { x: 0, y: 0 }, dimensions: { width: 780, height: 340 }, shadow: true },
+      { text: 'POLYPHONIC SEQUENCER', position: { x: 0, y: 0 }, dimensions: { width: 950, height: 340 }, shadow: true },
     ],
     'knobs': [],
-    'buttons': sequenceButtons.concat(trackSelectionButtons).concat(stepSelectionButtons)
+    'buttons': sequenceButtons.concat(trackSelectionButtons).concat(stepSelectionButtons),
+    'metadata': {
+      nTracks, nSteps
+    }
   }
 }
