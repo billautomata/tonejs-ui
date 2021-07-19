@@ -1,4 +1,9 @@
-import { KNOB_CHANGE, MOVE_WIRE, BUTTON_ACTION } from "../../constants/action-types"
+import { 
+  KNOB_CHANGE, 
+  MOVE_WIRE, 
+  BUTTON_ACTION,
+  NOTE_PRESSED
+} from "../../constants/action-types"
 // import * as d3 from 'd3'
 import { v4 as uuidv4 } from 'uuid'
 import populateScene from '../populateScene'
@@ -107,6 +112,15 @@ function rootReducer(state = initialState, action) {
     } else {
       btn.value = !btn.value
     }       
+    return Object.assign({}, state, { synths: state.synths })
+  } else if (action.type === NOTE_PRESSED) {
+    const synth = state.synths.filter(o=>{ return o.id === action.payload.synthID })[0]
+    let btn = synth.buttons.filter(o => { return o.name === `track_${action.payload.activeTrack}_step_${action.payload.activeStep}`})[0]    
+    const o = {}
+    o[action.payload.noteName] = !btn.noteData[action.payload.noteName]
+    btn.noteData = Object.assign({}, btn.noteData, o)
+    btn = Object.assign({}, btn, { noteData: btn.noteData })    
+    synth.buttons = Object.assign([], synth.buttons, { buttons: synth.buttons })
     return Object.assign({}, state, { synths: state.synths })
   }
   return state

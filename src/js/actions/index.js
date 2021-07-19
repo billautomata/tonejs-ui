@@ -2,7 +2,8 @@
 import { 
   KNOB_CHANGE, 
   MOVE_WIRE, 
-  BUTTON_ACTION 
+  BUTTON_ACTION,
+  NOTE_PRESSED
 } from "../constants/action-types"
 
 export function changeKnob(payload) {
@@ -15,4 +16,8 @@ export function moveWire(payload) {
 
 export function buttonAction(payload) {
   return { type: BUTTON_ACTION, payload }
+}
+
+export function notePressed(payload) {
+  return { type: NOTE_PRESSED, payload }
 }

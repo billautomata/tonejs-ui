@@ -12,12 +12,20 @@ const sequenceButtons = _.flatten(d3.range(nTracks).map(track=>{
       name: `track_${track}_step_${step}`, 
       action: (toneObject) => {}, 
       defaultValue: false, value: false,
-      noteData: []
+      noteData: {}
     }
   })
 }))
 
-sequenceButtons[2].noteData=['C','D','F']
+sequenceButtons[0].noteData = {
+  'C': true,
+  'D': true,
+  'E': false,
+  'F': true,
+  'G': false,
+  'A': false,
+  'B': false,
+}
 
 const trackSelectionButtons = d3.range(nTracks).map(track=>{
   return { type: 'D', 
