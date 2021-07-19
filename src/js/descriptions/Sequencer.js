@@ -19,6 +19,8 @@ const sequenceButtons = _.flatten(d3.range(nTracks).map(track=>{
 
 sequenceButtons[0].noteData = {
   'C3': true,
+  'D#3': true,
+  'G3': true,
 }
 
 const trackSelectionButtons = d3.range(nTracks).map(track=>{

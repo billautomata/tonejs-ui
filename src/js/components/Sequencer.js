@@ -45,7 +45,7 @@ export class ConnectedSequencer extends React.Component {
         {
           d3.range(5).map(octave=>{
             return (
-              <Keybed position={{ x:25 + (octave*140), y:0}} id={this.props.id} octave={octave}/>
+              <Keybed position={{ x: 25 + (octave*140), y: 5}} id={this.props.id} octave={octave+1}/>
             )
           })
         }        
