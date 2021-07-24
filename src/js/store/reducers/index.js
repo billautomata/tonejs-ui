@@ -32,14 +32,19 @@ const scene = [
     position: { x: 10, y: 30 },
   },
   {
+    type: 'sequencer',
+    id: uuidv4(),
+    position: { x: 10, y: 400 }
+  },
+  {
     type: 'lfo',
     id: uuidv4(),
     position: { x: 560, y: 30 }
   },
   {
-    type: 'sequencer',
+    type: 'midi-config',
     id: uuidv4(),
-    position: { x: 10, y: 400 }
+    position: { x: 680, y: 30 }
   }
 ]
 
@@ -57,10 +62,6 @@ populateScene(scene, synths, wires, toneObjects)
 toneObjects.forEach(o=>{
   console.log('ToneObject', typeof(o), o.name)
 })
-
-// setInterval(()=>{
-//   console.log('lfo value', meter.getValue())
-// },100)
 
 const initialState = {
   synths,

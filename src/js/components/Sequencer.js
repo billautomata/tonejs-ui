@@ -2,10 +2,11 @@ import React from "react"
 import { connect } from "react-redux"
 import * as d3 from 'd3'
 import * as Tone from 'tone'
+import WebMidi from "webmidi"
 import Widget from './Widget'
 import Keybed from './subcomponents/Keybed'
 import { notePressed } from '../actions/index'
-
+import Button from './subcomponents/Button'
 
 const mapStateToProps = (state, ownProps) => {
   const synth = state.synths.filter(o=>{ return o.id === ownProps.id })[0]
@@ -29,21 +30,25 @@ function mapDispatchToProps(dispatch) {
 export class ConnectedSequencer extends React.Component {
   constructor(props) {
     super(props)
+    this.inputRef_bpm = React.createRef()
     this.sharpsOrdinals = d3.scaleOrdinal().domain(d3.range(5)).range([0,1,3,4,5])
     this.naturalNoteNames = ['C','D','E','F','G','A','B']
     this.sharpNoteNames = ['C#','D#','F#','G#','A#']
     this.state = {
       currentStep: 0,
-      loop: new Tone.Loop(time=>{
-        this.playNotes()        
-        this.setState({ currentStep: (this.state.currentStep + 1) % this.props.metadata.nSteps })        
-      },'16n')
+      transportRunning: false
     }
+    this.loop = new Tone.Loop(time=>{
+      this.playNotes()        
+      this.setState({ currentStep: (this.state.currentStep + 1) % this.props.metadata.nSteps })        
+    },'16n')
     this.startSequencer = this.startSequencer.bind(this)
+    this.stopSequencer = this.stopSequencer.bind(this)
     this.playNotes = this.playNotes.bind(this)
   }
 
   componentDidMount () {
+    this.inputRef_bpm.current.value = this.props.metadata.bpm
   }
   componentDidUpdate () {
     // console.log(this.props.notes)
@@ -51,8 +56,20 @@ export class ConnectedSequencer extends React.Component {
 
   startSequencer () {
     Tone.start()
-    this.state.loop.start()
+    this.loop.start()
     Tone.Transport.start()
+    this.setState({
+      transportRunning: true
+    })
+  }
+
+  stopSequencer () {
+    this.loop.stop()
+    Tone.Transport.stop()
+    this.setState({
+      transportRunning: false,
+      currentStep: 0
+    })
   }
 
   playNotes () {
@@ -67,6 +84,7 @@ export class ConnectedSequencer extends React.Component {
     })
     if(notes.length > 0) {
       console.log(this.state.currentStep, notes)
+      // WebMidi.outputs[0].playNote(notes, 1, {duration: 100, velocity: 0.75});
     }
   }
 
@@ -113,15 +131,36 @@ export class ConnectedSequencer extends React.Component {
           d3.range(this.props.metadata.nSteps).map(n=>{
             return (
               <circle 
-                cx={35+(n*23)} cy='188' r='4' 
+                cx={35+(n*23)} cy={95+(this.props.metadata.nTracks*23)} r='4' 
                 stroke='#AAA' strokeWidth='0.5' 
                 fill={this.state.currentStep === n ? 'chartreuse' : 'white'}/>
             )
           })
         }
-        <g transform='translate(10 300)' onClick={this.startSequencer}>
-          <rect x='0' y='0' width='32' height='32'/>
-        </g>   
+        <g transform='translate(0 287)'>
+          <g transform='translate(10 0)' onMouseDown={this.startSequencer}>
+            <Button position={{ x: 0, y: 0 }} type='B' local buttonValue={this.state.transportRunning}/>
+            <text x='16' y='16' textAnchor='middle' dy='0.33em' fill={this.state.transportRunning ? '#FFF' : '#333' } style={{pointerEvents: 'none'}}>&#9654;</text>
+          </g>   
+          <g transform='translate(45 0)' onMouseDown={this.stopSequencer}>
+            <Button position={{ x: 0, y: 0 }} type='B' local />
+            <text x='15' y='16' textAnchor='middle' dy='0.33em' fill='#333' style={{pointerEvents: 'none'}}>&#9724;</text>
+          </g>   
+          <g transform='translate(80 0)' onMouseDown={this.pauseSequencer}>
+            <Button position={{ x: 0, y: 0 }} type='B' local />
+            <text x='15' y='15' textAnchor='middle' dy='0.33em' fill='#333' style={{pointerEvents: 'none'}}>&#10074;&#10074;</text>
+          </g>   
+        </g>
+        <g transform='translate(291 287)'>
+          <foreignObject x='0' y='0' width='72' height='32'>
+            <input ref={this.inputRef_bpm} type='text' style={{ width: 32, border: '0.5px solid #AAA', borderRadius: '2px', textAlign: 'center' }}/>            
+          </foreignObject>
+          <g transform='translate(42 0)'>
+            <Button position={{ x: 0, y: 0 }} type='B' local />
+            <text x='15' y='15' textAnchor='middle' dy='0.33em' fill='#333' fontSize='12' style={{pointerEvents: 'none'}}>SET</text>
+          </g>
+          <text x='20' y='32' textAnchor='middle' fontSize='10' fontWeight='300'>BPM</text>
+        </g>
       </g>
     )
   }

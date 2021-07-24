@@ -3,29 +3,34 @@ import { v4 as uuidv4 } from 'uuid'
 import LFO from '../descriptions/LFO'
 import MonoSynth from '../descriptions/MonoSynth'
 import Sequencer from '../descriptions/Sequencer'
+import MidiConfig from '../descriptions/MidiConfig'
 
 const labelDescriptions = {
   'lfo': LFO().labels,
   'monosynth': MonoSynth().labels,
   'sequencer': Sequencer().labels,
+  'midi-config': MidiConfig().labels,
 }
 
 const knobDescriptions = {
   'lfo': LFO().knobs,
   'monosynth': MonoSynth().knobs,
   'sequencer': Sequencer().knobs,
+  'midi-config': MidiConfig().knobs,
 }
 
 const buttonDescriptions = {
   'lfo': LFO().buttons,
   'monosynth': MonoSynth().buttons,
-  'sequencer': Sequencer().buttons
+  'sequencer': Sequencer().buttons,
+  'midi-config': MidiConfig().buttons,
 }
 
 const metadatas = {
   'lfo': LFO().metadata,
   'monosynth': MonoSynth().metadata,
-  'sequencer': Sequencer().metadata
+  'sequencer': Sequencer().metadata,
+  'midi-config': MidiConfig().metadata,
 }
 
 export default function loadScene (scene, synths, wires, toneObjects) {

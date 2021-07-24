@@ -6,8 +6,13 @@ import { buttonAction } from '../../actions/index'
 
 const mapStateToProps = (state, ownProps) => {
   // console.log('button synth id', ownProps.synthID)
+  const synth = state.synths.filter(o=>{return o.id === ownProps.synthID})[0]
+  if(synth === undefined) {
+    return {}
+  }
+  const button = synth.buttons.filter(o=>{ return o.id === ownProps.id })[0]
   return { 
-    buttonValue: state.synths.filter(o=>{return o.id === ownProps.synthID})[0].buttons.filter(o=>{ return o.id === ownProps.id })[0].value,
+    buttonValue: button.value,
   }
 }
 
@@ -42,12 +47,14 @@ export class ConnectedButton extends React.Component {
       currentlyPressed: true,
       active: !this.state.active
     })
-    this.props.buttonAction({
-      buttonGroup: this.props.buttonGroup,
-      id: this.props.id,
-      fn: this.props.action,
-      synthID: this.props.synthID, 
-    })
+    if(this.props.local === undefined) {
+      this.props.buttonAction({
+        buttonGroup: this.props.buttonGroup,
+        id: this.props.id,
+        fn: this.props.action,
+        synthID: this.props.synthID, 
+      })  
+    }
   }
   mouseUp () {
     this.setState({
@@ -72,7 +79,7 @@ export class ConnectedButton extends React.Component {
                   <VariantB currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } name={ this.props.name } />
                 )
                 case 'C': return (
-                  <VariantC currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } name={ this.props.name } />
+                  <VariantC currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } name={ this.props.name } labelSettings={ this.props.labelSettings } />
                 )
                 case 'D': return (
                   <VariantD currentlyPressed={ this.state.currentlyPressed } active={ this.props.buttonValue } name={ this.props.name } size={ this.props.size } />
@@ -108,11 +115,18 @@ const VariantB = ({ currentlyPressed, active, name }) => (
   </>
 )
 
-const VariantC = ({ currentlyPressed, active }) => (
+const VariantC = ({ currentlyPressed, active, name, labelSettings }) => (
   <>
     <rect x='0' y='0' width='20' height='20' rx='2'
       fill={ active ? 'orange' : '#EEE' } stroke='#AAA' 
       filter={currentlyPressed ? null : 'url(#button-shadow)' }/>    
+    {(()=>{
+      if (labelSettings) {
+        return (
+          <text {...labelSettings}>{name}</text>
+        )
+      }
+    })()}
   </>
 )
 

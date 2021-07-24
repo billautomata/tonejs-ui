@@ -3,9 +3,9 @@ import { connect } from "react-redux"
 import { moveWire } from "../actions/index"
 import MonoSynth from './MonoSynth'
 import LFO from './LFO'
-import Widget from './Widget'
 import Wire from './Wire'
 import Sequencer from './Sequencer'
+import MidiConfig from './MidiConfig'
 
 const mapStateToProps = (state, ownProps) => {
   return { 
@@ -21,8 +21,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 const ConnectedApp = ({ synths, wires, moveWire }) => (
-  <div style={{padding: '10px', fontFamily: 'Roboto'}}>
-    <svg width={1200} height={768} style={{outline: '1px solid #DDD', fontFamily: 'Roboto'}}
+  <div style={{padding: '0px', fontFamily: 'Roboto'}}>
+    <svg width={window.innerWidth-6} height={window.innerHeight-6} style={{outline: '1px solid #DDD', fontFamily: 'Roboto'}}
     onMouseMove={(event)=>{
       // console.log(event.nativeEvent)
       // moveWire({ id: 'A', position: { x: event.nativeEvent.layerX, y: event.nativeEvent.layerY } })
@@ -46,6 +46,9 @@ const ConnectedApp = ({ synths, wires, moveWire }) => (
             )
             case 'sequencer': return (
               <Sequencer {...synth} key={`synth_${synth.id}`}/>
+            )
+            case 'midi-config': return (
+              <MidiConfig {...synth} key={`synth_${synth.id}`}/>
             )
             default: return (
               <></>
